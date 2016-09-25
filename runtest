@@ -1,0 +1,95 @@
+#!/bin/bash
+###########################################################
+#
+# Copyright (c) 2012 Simon Southwell. All rights reserved.
+#
+# Simple script to run the tests associated with the cpu8051
+# ISS.
+#
+# $Id: runtest,v 1.1 2013/06/25 18:40:46 simon Exp $
+# $Source: /home/simon/CVS/src/cpu/8051/runtest,v $
+# 
+###########################################################
+
+# List of tests to be run 
+# NB: acall includes testing of lcall, ret
+#     rl    includes testing of rlc, rr, rrc
+#     jb    includes testing of jbc, jnb
+#     jc    includes testing of jnc
+#     jz    includes testing of jnz
+#     jmp   includes testing of sjmp, ljmp, ajmp
+#     push  includes testing of pop
+#     movc  includes testing of movx
+#     xch   includes testing of xchd, swap
+
+tests=" \
+  acall \
+  add   \
+  addc  \
+  subb  \
+  anl   \
+  orl   \
+  xrl   \
+  rl    \
+  cjne  \
+  clr   \
+  setb  \
+  cpl   \
+  da    \
+  dec   \
+  inc   \
+  div   \
+  mul   \
+  djnz  \
+  jb    \
+  jc    \
+  jmp   \
+  jz    \
+  push  \
+  mov   \
+  movc  \
+  xch   \
+  reti  \
+"
+
+# Define the script that runs the assembler
+assembler=asm8051
+
+# Define the model
+cpu_model=cpu8051
+
+rundir=`pwd`
+
+# Make sure the model is up-to-date
+make
+
+# Run all the tests
+for test in $tests
+do 
+    # Change directory to the specific test code directory, and build the code
+    cd test/${test}
+    ../../$assembler
+
+    # For the RETI test, generate an interrupt after 100 cycle
+    if [ "$test" = "reti" ]
+    then
+        int_opts="-i 100"
+    else
+        int_opts=""
+    fi
+    
+    # Run the test on the model
+    result=`../../$cpu_model ${int_opts} -r 0x7f -f ${test}.ihx`
+
+    # Check the pass/fail criteria (value at iram address 0x7f is 99 for a pass)
+    if [ "$result" = "IRAM 0x007f = 99" ]; 
+    then
+       disp_res="PASS"
+    else
+       disp_res="**FAIL**"
+    fi
+
+    # Return to the start directory
+    cd $rundir
+    echo $test "	: " $disp_res
+done

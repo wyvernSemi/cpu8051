@@ -1,0 +1,37 @@
+##########################################################
+# 
+# Copyright (c) 2012 Simon Southwell. All rights reserved.
+#
+# Date: 25th August 2012  
+#
+# Script to run all the self-tests
+# 
+# $Id: asm8051,v 1.1 2013/06/25 18:40:45 simon Exp $
+# $Source: /home/simon/CVS/src/cpu/8051/asm8051,v $
+# 
+##########################################################
+
+#!/bin/bash
+
+
+linkargs=""
+
+if [ "$OSTYPE" = "cygwin" -o "$OSTYPE" = "linux" ] 
+then
+    asmexec=sdas8051
+    linkexec=sdld
+else
+    asx8051=sdas8051
+    linkexec=aslink
+    $linkargs=" -e"
+fi
+
+
+if [ -e "*.ihx" ] 
+then
+    rm -rf *.ihx *.lst *.rel *.sym
+fi
+
+$asmexec -lso *.asm >& /dev/null
+echo "-i " `ls *.rel` $linkargs| $linkexec -c >& /dev/null
+
