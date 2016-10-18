@@ -6,7 +6,7 @@
 #
 # Script to run all the self-tests
 # 
-# $Id: asm8051,v 1.1 2013/06/25 18:40:45 simon Exp $
+# $Id: asm8051,v 1.2 2016-10-18 05:35:45 simon Exp $
 # $Source: /home/simon/CVS/src/cpu/8051/asm8051,v $
 # 
 ##########################################################
@@ -16,7 +16,7 @@
 
 linkargs=""
 
-if [ "$OSTYPE" = "cygwin" -o "$OSTYPE" = "linux" ] 
+if [ "$OSTYPE" = "cygwin" -o "$OSTYPE" = "linux" -o "$OSTYPE" = "linux-gnu" ] 
 then
     asmexec=sdas8051
     linkexec=sdld
