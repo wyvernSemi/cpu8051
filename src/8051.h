@@ -8,7 +8,7 @@
 //
 // This file is the main internal header for the ISS.
 //
-// $Id: 8051.h,v 1.1 2013-06-25 18:40:47 simon Exp $
+// $Id: 8051.h,v 1.3 2018/09/01 06:56:44 simon Exp $
 // $Source: /home/simon/CVS/src/cpu/8051/src/8051.h,v $
 //
 //=============================================================
@@ -165,8 +165,6 @@
 #define MEM_CB_READ             1
 #define MEM_CB_WRITE            0
 
-#define MEM_CB_TIME_UPDATE      -1
-
 // Remap some of the 
 #define ADDC                    ADD
  
@@ -189,7 +187,7 @@
 /* 0x28 */ {ADD,  "ADD   R0               ", 1, 1, ACC,  REG0},  {ADD,   "ADD   R1               ", 1, 1, ACC,  REG1}, {ADD,   "ADD   R2               ", 1, 1, ACC,  REG2},  {ADD,  "ADD   R3               ", 1, 1, ACC,  REG3}, \
 /* 0x2C */ {ADD,  "ADD   R4               ", 1, 1, ACC,  REG4},  {ADD,   "ADD   R5               ", 1, 1, ACC,  REG5}, {ADD,   "ADD   R6               ", 1, 1, ACC,  REG6},  {ADD,  "ADD   R7               ", 1, 1, ACC,  REG7}, \
  \
-/* 0x30 */ {JNB,  "JNB   baddr, raddr     ", 3, 3, BIT,  REL},   {ACALL, "ACALL page1            ", 1, 3, NONE, NONE}, {RETI,  "RETI                   ", 1, 5, NONE, NONE},  {RLC,  "RLC   A                ", 1, 1, NONE, NONE}, \
+/* 0x30 */ {JNB,  "JNB   baddr, raddr     ", 3, 3, BIT,  REL},   {ACALL, "ACALL page1            ", 2, 3, NONE, NONE}, {RETI,  "RETI                   ", 1, 5, NONE, NONE},  {RLC,  "RLC   A                ", 1, 1, NONE, NONE}, \
 /* 0x34 */ {ADDC, "ADDC  A, #data         ", 2, 2, ACC,  IMM},   {ADDC,  "ADDC  iaddr            ", 2, 2, ACC,  DIR},  {ADDC,  "ADDC  @R0              ", 1, 2, ACC,  IND0},  {ADDC, "ADDC  @R1              ", 1, 2, ACC,  IND1}, \
 /* 0x38 */ {ADDC, "ADDC  R0               ", 1, 1, ACC,  REG0},  {ADDC,  "ADDC  R1               ", 1, 1, ACC,  REG1}, {ADDC,  "ADDC  R2               ", 1, 1, ACC,  REG2},  {ADDC, "ADDC  R3               ", 1, 1, ACC,  REG3}, \
 /* 0x3C */ {ADDC, "ADDC  R4               ", 1, 1, ACC,  REG4},  {ADDC,  "ADDC  R5               ", 1, 1, ACC,  REG5}, {ADDC,  "ADDC  R6               ", 1, 1, ACC,  REG6},  {ADDC, "ADDC  R7               ", 1, 1, ACC,  REG7}, \
@@ -199,7 +197,7 @@
 /* 0x48 */ {ORL,  "ORL   R0               ", 1, 1, ACC,  REG0},  {ORL,   "ORL   R1               ", 1, 1, ACC,  REG1}, {ORL,   "ORL   R2               ", 1, 1, ACC,  REG2},  {ORL,  "ORL   R3               ", 1, 1, ACC,  REG3}, \
 /* 0x4C */ {ORL,  "ORL   R4               ", 1, 1, ACC,  REG4},  {ORL,   "ORL   R5               ", 1, 1, ACC,  REG5}, {ORL,   "ORL   R6               ", 1, 1, ACC,  REG6},  {ORL,  "ORL   R7               ", 1, 1, ACC,  REG7}, \
  \
-/* 0x50 */ {JNC,  "JNC   raddr            ", 2, 2, CC,   REL},   {ACALL, "ACALL page2            ", 1, 3, NONE, NONE}, {ANL,   "ANL   iaddr, A         ", 2, 2, DIR,  ACC},   {ANL,  "ANL   iaddr, #data     ", 3, 3, DIR,  IMM},  \
+/* 0x50 */ {JNC,  "JNC   raddr            ", 2, 2, CC,   REL},   {ACALL, "ACALL page2            ", 2, 3, NONE, NONE}, {ANL,   "ANL   iaddr, A         ", 2, 2, DIR,  ACC},   {ANL,  "ANL   iaddr, #data     ", 3, 3, DIR,  IMM},  \
 /* 0x54 */ {ANL,  "ANL   A, #data         ", 2, 2, ACC,  IMM},   {ANL,   "ANL   A, iaddr         ", 2, 2, ACC,  DIR},  {ANL,   "ANL   A, @R0           ", 1, 2, ACC,  IND0},  {ANL,  "ANL   A, @R1           ", 1, 2, ACC,  IND1}, \
 /* 0x58 */ {ANL,  "ANL   R0               ", 1, 1, ACC,  REG0},  {ANL,   "ANL   R1               ", 1, 1, ACC,  REG1}, {ANL,   "ANL   R2               ", 1, 1, ACC,  REG2},  {ANL,  "ANL   R3               ", 1, 1, ACC,  REG3}, \
 /* 0x5C */ {ANL,  "ANL   R4               ", 1, 1, ACC,  REG4},  {ANL,   "ANL   R5               ", 1, 1, ACC,  REG5}, {ANL,   "ANL   R6               ", 1, 1, ACC,  REG6},  {ANL,  "ANL   R7               ", 1, 1, ACC,  REG7}, \
@@ -209,7 +207,7 @@
 /* 0x68 */ {XRL,  "XRL   R0               ", 1, 1, ACC,  REG0},  {XRL,   "XRL   R1               ", 1, 1, ACC,  REG1}, {XRL,   "XRL   R2               ", 1, 1, ACC,  REG2},  {XRL,  "XRL   R3               ", 1, 1, ACC,  REG3}, \
 /* 0x6C */ {XRL,  "XRL   R1               ", 1, 1, ACC,  REG4},  {XRL,   "XRL   R5               ", 1, 1, ACC,  REG5}, {XRL,   "XRL   R6               ", 1, 1, ACC,  REG6},  {XRL,  "XRL   R7               ", 1, 1, ACC,  REG7}, \
  \
-/* 0x70 */ {JNZ,  "JNZ   raddr            ", 2, 2, ACC,  REL},   {ACALL, "ACALL page3            ", 1, 3, NONE, NONE}, {ORL,   "ORL   C, baddr         ", 2, 2, CC,   BIT},   {JMP,  "JMP   @A+DPTR          ", 1, 3, NONE, NONE}, \
+/* 0x70 */ {JNZ,  "JNZ   raddr            ", 2, 2, ACC,  REL},   {ACALL, "ACALL page3            ", 2, 3, NONE, NONE}, {ORL,   "ORL   C, baddr         ", 2, 2, CC,   BIT},   {JMP,  "JMP   @A+DPTR          ", 1, 3, NONE, NONE}, \
 /* 0x74 */ {MOV,  "MOV   A, #data         ", 2, 2, ACC,  IMM},   {MOV,   "MOV   iaddr, #data     ", 3, 3, DIR,  IMM},  {MOV,   "MOV   @R0, #data       ", 2, 2, IND0, IMM},   {MOV,  "MOV   @R1, #data       ", 2, 2, IND1, IMM},  \
 /* 0x78 */ {MOV,  "MOV   R0, #data        ", 2, 2, REG0, IMM},   {MOV,   "MOV   R1, #data        ", 2, 2, REG1, IMM},  {MOV,   "MOV   R2, #data        ", 2, 2, REG2, IMM},   {MOV,  "MOV   R3, #data        ", 2, 2, REG3, IMM},  \
 /* 0x7C */ {MOV,  "MOV   R4, #data        ", 2, 2, REG4, IMM},   {MOV,   "MOV   R5, #data        ", 2, 2, REG5, IMM},  {MOV,   "MOV   R6, #data        ", 2, 2, REG6, IMM},   {MOV,  "MOV   R7, #data        ", 2, 2, REG7, IMM},  \
@@ -219,7 +217,7 @@
 /* 0x88 */ {MOV,  "MOV   iaddr, R0        ", 2, 2, DIR,  REG0},  {MOV,   "MOV   iaddr, R1        ", 2, 2, DIR,  REG1}, {MOV,   "MOV   iaddr, R2        ", 2, 2, DIR,  REG2},  {MOV,  "MOV   iaddr, R0        ", 2, 2, DIR,  REG3}, \
 /* 0x8C */ {MOV,  "MOV   iaddr, R4        ", 2, 2, DIR,  REG4},  {MOV,   "MOV   iaddr, R5        ", 2, 2, DIR,  REG5}, {MOV,   "MOV   iaddr, R6        ", 2, 2, DIR,  REG6},  {MOV,  "MOV   iaddr, R7        ", 2, 2, DIR,  REG7}, \
  \
-/* 0x90 */ {MOV,  "MOV   DPTR, #data16    ", 3, 3, DPTR, IMM16}, {ACALL, "ACALL page4            ", 1, 3, NONE, NONE}, {MOV,   "MOV   baddr, C         ", 2, 2, BIT,  CC},    {MOVC, "MOVC  A,@A+DPTR        ", 1, 3, ACC,  DPTR}, \
+/* 0x90 */ {MOV,  "MOV   DPTR, #data16    ", 3, 3, DPTR, IMM16}, {ACALL, "ACALL page4            ", 2, 3, NONE, NONE}, {MOV,   "MOV   baddr, C         ", 2, 2, BIT,  CC},    {MOVC, "MOVC  A,@A+DPTR        ", 1, 3, ACC,  DPTR}, \
 /* 0x94 */ {SUBB, "SUBB  A, #data         ", 2, 2, ACC,  IMM},   {SUBB,  "SUBB  A, iaddr         ", 2, 2, ACC,  DIR} , {SUBB,  "SUBB  A, @R0           ", 1, 2, ACC,  IND0},  {SUBB, "SUBB  A, @R1           ", 1, 2, ACC,  IND1}, \
 /* 0x98 */ {SUBB, "SUBB  R0               ", 1, 1, ACC,  REG0},  {SUBB,  "SUBB  R1               ", 1, 1, ACC,  REG1}, {SUBB,  "SUBB  R2               ", 1, 1, ACC,  REG2},  {SUBB, "SUBB  R3               ", 1, 1, ACC,  REG3}, \
 /* 0x9C */ {SUBB, "SUBB  R4               ", 1, 1, ACC,  REG4},  {SUBB,  "SUBB  R5               ", 1, 1, ACC,  REG5}, {SUBB,  "SUBB  R6               ", 1, 1, ACC,  REG6},  {SUBB, "SUBB  R7               ", 1, 1, ACC,  REG7}, \
@@ -229,7 +227,7 @@
 /* 0xA8 */ {MOV,  "MOV   R0, iaddr        ", 2, 2, REG0, DIR},   {MOV,   "MOV   R1, iaddr        ", 2, 2, REG1, DIR},  {MOV,   "MOV   R2, iaddr        ", 2, 2, REG2, DIR},   {MOV,  "MOV   R3, iaddr        ", 2, 2, REG3, DIR},  \
 /* 0xAC */ {MOV,  "MOV   R4, iaddr        ", 2, 2, REG4, DIR},   {MOV,   "MOV   R5, iaddr        ", 2, 2, REG5, DIR},  {MOV,   "MOV   R6, iaddr        ", 2, 2, REG6, DIR},   {MOV,  "MOV   R7, iaddr        ", 2, 2, REG7, DIR},  \
  \
-/* 0xB0 */ {ANL,  "ANL   C, /baddr        ", 2, 2, CC,   NBIT},  {ACALL, "ACALL page5            ", 1, 3, NONE, NONE}, {CPL,   "CPL   baddr            ", 2, 2, BIT,  NONE},  {CPL,  "CPL   C                ", 1, 1, CC,   NONE}, \
+/* 0xB0 */ {ANL,  "ANL   C, /baddr        ", 2, 2, CC,   NBIT},  {ACALL, "ACALL page5            ", 2, 3, NONE, NONE}, {CPL,   "CPL   baddr            ", 2, 2, BIT,  NONE},  {CPL,  "CPL   C                ", 1, 1, CC,   NONE}, \
 /* 0xB4 */ {CJNE, "CJNE  A, #data, raddr  ", 3, 3, ACC,  IMM},   {CJNE,  "CJNE  A, iaddr, raddr  ", 3, 3, ACC,  DIR},  {CJNE,  "CJNE  @R0, #data, raddr", 3, 4, IND0, IMM},   {CJNE, "CJNE  @R1, #data, raddr", 3, 4, IND1, IMM},  \
 /* 0xB8 */ {CJNE, "CJNE  R0, #data, raddr ", 3, 3, REG0, IMM},   {CJNE,  "CJNE  R1, #data, raddr ", 3, 3, REG1, IMM},  {CJNE,  "CJNE  R2, #data, raddr ", 3, 3, REG2, IMM},   {CJNE, "CJNE  R3, #data, raddr ", 3, 3, REG3, IMM},  \
 /* 0xBC */ {CJNE, "CJNE  R4, #data, raddr ", 3, 3, REG4, IMM},   {CJNE,  "CJNE  R5, #data, raddr ", 3, 3, REG5, IMM},  {CJNE,  "CJNE  R6, #data, raddr ", 3, 3, REG6, IMM},   {CJNE, "CJNE  R7, #data, raddr ", 3, 3, REG7, IMM},  \
@@ -239,7 +237,7 @@
 /* 0xC8 */ {XCH,  "XCH   A, R0            ", 1, 1, ACC,  REG0},  {XCH,   "XCH   A, R1            ", 1, 1, ACC,  REG1}, {XCH,   "XCH   A, R2            ", 1, 1, ACC,  REG2},  {XCH,  "XCH   A, R3            ", 1, 1, ACC,  REG3}, \
 /* 0xCC */ {XCH,  "XCH   A, R4            ", 1, 1, ACC,  REG4},  {XCH,   "XCH   A, R5            ", 1, 1, ACC,  REG5}, {XCH,   "XCH   A, R6            ", 1, 1, ACC,  REG6},  {XCH,  "XCH   A, R7            ", 1, 1, ACC,  REG7}, \
            \
-/* 0xD0 */ {POP,  "POP   iaddr            ", 2, 2, DIR,  NONE},  {ACALL, "ACALL page6            ", 1, 3, NONE, NONE}, {SETB,  "SETB  baddr            ", 2, 2, BIT,  NONE},  {SETB, "SETB  C                ", 1, 1, CC,   NONE}, \
+/* 0xD0 */ {POP,  "POP   iaddr            ", 2, 2, DIR,  NONE},  {ACALL, "ACALL page6            ", 2, 3, NONE, NONE}, {SETB,  "SETB  baddr            ", 2, 2, BIT,  NONE},  {SETB, "SETB  C                ", 1, 1, CC,   NONE}, \
 /* 0xD4 */ {DA,   "DA                     ", 1, 1, ACC,  NONE},  {DJNZ,  "DJNZ  iaddr, raddr     ", 3, 3, DIR,  REL},  {XCHD,  "XCHD  A, @R0           ", 1, 2, ACC,  IND0},  {XCHD, "XCHD  A, @R1           ", 1, 2, ACC,  IND1}, \
 /* 0xD8 */ {DJNZ, "DJNZ  R0, raddr        ", 2, 2, REG0, REL},   {DJNZ,  "DJNZ  R1, raddr        ", 2, 2, REG1, REL},  {DJNZ,  "DJNZ  R2, raddr        ", 2, 2, REG2, REL},   {DJNZ, "DJNZ  R3, raddr        ", 2, 2, REG3, REL},  \
 /* 0xDC */ {DJNZ, "DJNZ  R4, raddr        ", 2, 2, REG4, REL},   {DJNZ,  "DJNZ  R5, raddr        ", 2, 2, REG5, REL},  {DJNZ,  "DJNZ  R6, raddr        ", 2, 2, REG6, REL},   {DJNZ, "DJNZ  R7, raddr        ", 2, 2, REG7, REL},  \
@@ -249,7 +247,7 @@
 /* 0xE8 */ {MOV,  "MOV   A, R0            ", 1, 1, ACC,  REG0},  {MOV,   "MOV   A, R1            ", 1, 1, ACC,  REG1}, {MOV,   "MOV   A, R2            ", 1, 1, ACC,  REG2},  {MOV,  "MOV   A, R3            ", 1, 1, ACC,  REG3}, \
 /* 0xEC */ {MOV,  "MOV   A, R4            ", 1, 1, ACC,  REG4},  {MOV,   "MOV   A, R5            ", 1, 1, ACC,  REG5}, {MOV,   "MOV   A, R6            ", 1, 1, ACC,  REG6},  {MOV,  "MOV   A, R7            ", 1, 1, ACC,  REG7}, \
  \
-/* 0xF0 */ {MOVX, "MOVX  DPTR, A          ", 1, 3, EXT,  ACC},   {ACALL, "ACALL page7            ", 1, 3, NONE, NONE}, {MOVX,  "MOVX  @R0, A           ", 1, 3, EXT0, ACC},   {MOVX, "MOVX  @R1, A           ", 1, 3, EXT1, ACC},  \
+/* 0xF0 */ {MOVX, "MOVX  DPTR, A          ", 1, 3, EXT,  ACC},   {ACALL, "ACALL page7            ", 2, 3, NONE, NONE}, {MOVX,  "MOVX  @R0, A           ", 1, 3, EXT0, ACC},   {MOVX, "MOVX  @R1, A           ", 1, 3, EXT1, ACC},  \
 /* 0xF4 */ {CPL,  "CPL   A                ", 1, 1, ACC,  NONE},  {MOV,   "MOV   iaddr, A         ", 2, 2, DIR,  ACC},  {MOV,   "MOV   @R0, A           ", 1, 2, IND0, ACC},   {MOV,  "MOV   @R1, A           ", 1, 2, IND1, ACC},  \
 /* 0xF8 */ {MOV,  "MOV   R0, A            ", 1, 1, REG0, ACC},   {MOV,   "MOV   R1, A            ", 1, 1, REG1, ACC},  {MOV,   "MOV   R2, A            ", 1, 1, REG2, ACC},   {MOV,  "MOV   R3, A            ", 1, 1, REG3, ACC},  \
 /* 0xFC */ {MOV,  "MOV   R4, A            ", 1, 1, REG4, ACC},   {MOV,   "MOV   R5, A            ", 1, 1, REG5, ACC},  {MOV,   "MOV   R6, A            ", 1, 1, REG6, ACC},   {MOV,  "MOV   R7, A            ", 1, 1, REG7, ACC}   \
