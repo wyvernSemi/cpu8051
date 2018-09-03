@@ -10,7 +10,7 @@
 // instructions. It has the main 8051 state and functions to
 // access this state, decoding the various adderssing modes.
 //
-// $Id: inst.c,v 1.1 2013-06-25 18:40:49 simon Exp $
+// $Id: inst.c,v 1.2 2018/09/03 18:26:34 simon Exp $
 // $Source: /home/simon/CVS/src/cpu/8051/src/inst.c,v $
 //
 //=============================================================
@@ -823,6 +823,9 @@ void JC (pDecode_t d) {
 //    JMP @A+DPTR
 //
 void JMP (pDecode_t d) {
+
+	// Update the cycle count
+    cycle_count += d->decode->clk_cycles;
 
     pc = acc + dptr;
 }
