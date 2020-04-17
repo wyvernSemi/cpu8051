@@ -8,7 +8,7 @@
 //
 // This file is the main internal header for the ISS.
 //
-// $Id: 8051.h,v 1.3 2018/09/01 06:56:44 simon Exp $
+// $Id: 8051.h,v 1.4 2020/04/17 10:51:16 simon Exp $
 // $Source: /home/simon/CVS/src/cpu/8051/src/8051.h,v $
 //
 //=============================================================
@@ -76,7 +76,9 @@
 #define PSW_UD        1
 #define PSW_P         0
 
+
 // Bit twiddling of the program status word
+#define SET_PSW_P(_psw_, _arg_)  { _psw_ = ((_psw_) & ~(1 << PSW_P))  | ((_arg_) ? (1 << PSW_P)  : 0); }
 #define SET_PSW_CY(_psw_, _arg_) { _psw_ = ((_psw_) & ~(1 << PSW_CY)) | ((_arg_) ? (1 << PSW_CY) : 0); }
 #define SET_PSW_AC(_psw_, _arg_) { _psw_ = ((_psw_) & ~(1 << PSW_AC)) | ((_arg_) ? (1 << PSW_AC) : 0); }
 #define SET_PSW_OV(_psw_, _arg_) { _psw_ = ((_psw_) & ~(1 << PSW_OV)) | ((_arg_) ? (1 << PSW_OV) : 0); }
@@ -89,6 +91,7 @@
 #define GET_PSW_AC(_psw_)  (((_psw_) & (1 << PSW_AC)) ? 1 : 0)
 #define GET_PSW_OV(_psw_)  (((_psw_) & (1 << PSW_OV)) ? 1 : 0)
 #define GET_PSW_RS(_psw_)  ((((_psw_) & ((1 << PSW_RS1) | (1 << PSW_RS0))) >> PSW_RS0) & 0x3)
+#define GET_PSW_P(_psw_)   (((_psw) & (1 << PSW_P)) ? 1 : 0))
 
 // Standard SFR addresses
 #define SFR_P0        0x80

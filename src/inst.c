@@ -10,7 +10,7 @@
 // instructions. It has the main 8051 state and functions to
 // access this state, decoding the various adderssing modes.
 //
-// $Id: inst.c,v 1.2 2018/09/03 18:26:34 simon Exp $
+// $Id: inst.c,v 1.3 2020/04/17 10:51:16 simon Exp $
 // $Source: /home/simon/CVS/src/cpu/8051/src/inst.c,v $
 //
 //=============================================================
@@ -60,6 +60,22 @@ static int      psw;
 // Interrupt level state
        int      int_level;
        int      last_int_level;
+
+
+// -------------------------------------------------------------------------
+// odd_parity8()
+//
+// Returns 1 if val (lower 8 bits) is odd parity, else 0
+//
+int odd_parity8(unsigned val) {
+    
+    unsigned x = val & 0xff;
+    
+    x ^= x >> 4;
+    x ^= x >> 2;
+    x ^= x >> 1;
+    return (x) & 1;
+}
 
 // -------------------------------------------------------------------------
 // fetch_sfr()
@@ -171,7 +187,9 @@ void set_sfr (int addr, int arg) {
         // Update register bank on RS bits
         r = &int_ram[psw & (PSW_RS0 | PSW_RS1)];
         break;
-    case SFR_ACC  : acc     = arg;
+    case SFR_ACC  : 
+        acc     = arg;
+        SET_PSW_P(psw, odd_parity8(acc));
         break;
     case SFR_B    : b       = arg;
         break;
@@ -284,7 +302,9 @@ static void write_arg (int mode, int arg, int oparg0) {
         else
             pExtCallback(r[1], arg, MEM_CB_WRITE, ext_ram, cycle_count);
         break;
-    case ACC:  acc  = arg;
+    case ACC:
+        acc  = arg;
+        SET_PSW_P(psw, odd_parity8(acc));
         break;
     case BREG: b    = arg;
         break;
@@ -421,6 +441,7 @@ void ADD (pDecode_t d) {
     SET_PSW_CY(psw, acc & 0x100);
     SET_PSW_AC(psw, (((old_acc & 0xf) + (add_val & 0xf)) & 0x10) ? 1 : 0);
     SET_PSW_OV(psw, (old_acc ^ acc) & 0x80);
+    SET_PSW_P(psw, odd_parity8(acc));
 
     // Discard carry/overflow information
     acc &= 0xff;
@@ -605,6 +626,7 @@ void DA (pDecode_t d) {
 
     c = (acc & 0x100) ? 1 : c;
     SET_PSW_CY(psw, c);
+    SET_PSW_P(psw, odd_parity8(acc));
 
     acc &= 0xff;
 
@@ -1035,6 +1057,8 @@ void MOVC(pDecode_t d) {
 
     acc = code_mem[acc+op2];
     
+    SET_PSW_P(psw, odd_parity8(acc));
+    
 }
 
 // -------------------------------------------------------------------------
@@ -1251,7 +1275,9 @@ void RLC(pDecode_t d) {
 
     acc = ((acc & 0xff) << 1) | GET_PSW_CY(psw);
     SET_PSW_CY(psw, (acc & 0x100) ? 1 : 0);
+    SET_PSW_P(psw, odd_parity8(acc));
     acc &= 0xff;
+    
 
     pc += d->decode->instr_size;
 }
@@ -1288,6 +1314,7 @@ void RRC(pDecode_t d) {
     tmp = acc & 1;
     acc = (acc >> 1) | (GET_PSW_CY(psw) << 7);
     SET_PSW_CY(psw, tmp);
+    SET_PSW_P(psw, odd_parity8(acc));
     pc += d->decode->instr_size;
 }
 
@@ -1368,6 +1395,7 @@ void SUBB(pDecode_t d) {
     SET_PSW_CY(psw, (op1 > old_acc) ? 1 : 0);
     SET_PSW_AC(psw, ((op1 & 0xf) > (old_acc & 0xf)) ? 1 : 0);
     SET_PSW_OV(psw, ((old_acc ^ acc) & 0x80));
+    SET_PSW_P(psw, odd_parity8(acc));
 
     acc &= 0xff;
 
