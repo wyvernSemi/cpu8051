@@ -8,7 +8,7 @@
 //
 // This file is the main internal header for the ISS.
 //
-// $Id: 8051.h,v 1.4 2020/04/17 10:51:16 simon Exp $
+// $Id: 8051.h,v 1.5 2020/04/18 06:09:19 simon Exp $
 // $Source: /home/simon/CVS/src/cpu/8051/src/8051.h,v $
 //
 //=============================================================
@@ -91,7 +91,7 @@
 #define GET_PSW_AC(_psw_)  (((_psw_) & (1 << PSW_AC)) ? 1 : 0)
 #define GET_PSW_OV(_psw_)  (((_psw_) & (1 << PSW_OV)) ? 1 : 0)
 #define GET_PSW_RS(_psw_)  ((((_psw_) & ((1 << PSW_RS1) | (1 << PSW_RS0))) >> PSW_RS0) & 0x3)
-#define GET_PSW_P(_psw_)   (((_psw) & (1 << PSW_P)) ? 1 : 0))
+#define GET_PSW_P(_psw_)   (((_psw_) & (1 << PSW_P)) ? 1 : 0))
 
 // Standard SFR addresses
 #define SFR_P0        0x80
