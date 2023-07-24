@@ -36,8 +36,9 @@ extern char* optarg;
 static int  ext0_interrupt (int time, int *wakeup_time);
 static int  ext0_fire_time = -1;
 
-// -------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+//==========================================================================
+//                               M A I N
+//==========================================================================
 
 int main(int argc, char** argv) {
 
@@ -93,7 +94,7 @@ int main(int argc, char** argv) {
                     "    -f Specify executable IHX file (default try.ihx)\n"
                     "    -v Specify verbose output\n"
                     "    -d Disable breaking on lock condition\n"
-		    "    -r IRAM dump address\n"
+                    "    -r IRAM dump address\n"
                     "    -t Activate timers (0 = off, 1 = TIM0, 2 = TIM1, 3 = both)"
                     "\n"
                     , argv[0]);
@@ -112,7 +113,10 @@ int main(int argc, char** argv) {
     }
 }
 
+// -------------------------------------------------------------------------
 // EXT 0 interrupt callback function
+// -------------------------------------------------------------------------
+
 static int ext0_interrupt (int time, int *wakeup_time) {
 
     static int initialised = 0;

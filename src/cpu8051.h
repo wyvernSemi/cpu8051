@@ -27,7 +27,7 @@
 #define INT_CALLBACK_EXT0       0
 #define INT_CALLBACK_EXT1       1
 
-#define MEM_CB_TIME_UPDATE      -1
+#define CB_NOT_PROCESSED        -1
 
 #define VERBOSITY_LVL_OFF       0
 #define VERBOSITY_LVL_1         1
@@ -70,6 +70,8 @@ extern void set_verbosity_lvl      (int lvl);
 extern void set_output_stream      (FILE* file_pointer);
 extern void set_disable_lock_break ();
 extern void clr_disable_lock_break ();
+extern void en_all_sfr_callback    ();
+extern void dis_all_sfr_callback   ();
 
 // User access routines...
 
@@ -86,6 +88,6 @@ extern int  get_ext_ram_byte       (int addr);
 extern void set_ext_ram_byte       (int addr, int data);
 
 // Main execution function
-extern int  run_program     (char* ihx_fname, int run_cycles, int break_addr, int timer_enable);
+extern int  run_program            (char* ihx_fname, int run_cycles, int break_addr, int timer_enable);
 
 #endif

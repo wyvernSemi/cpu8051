@@ -302,6 +302,7 @@ extern int      int_level;
 extern int      last_int_level;
 extern int      wakeup_time_ext_mem;
 extern int      wakeup_time_sfr;
+extern int      always_call_sfr_cb;
 
 extern pmemcallback_t pExtCallback;
 extern pmemcallback_t pSfrCallback;

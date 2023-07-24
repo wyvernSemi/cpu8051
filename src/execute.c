@@ -58,6 +58,8 @@ static FILE*    ofp = NULL;                  // Stream for output data
 static int      disable_lock_break = 0;      // Disable/enable brekpoint on lock conditions
 static int      verbose = 0;                 // Verbosity level
 
+       int      always_call_sfr_cb = 0;      // Always call a registered SFR access callback on all SFR accesses
+
 // Main decode table for opcodes. Array of DecodeData_t structures, with each tuple consisting of
 // <func ptr>, <opcode str>, <num instr bytes>, <exec clk cycles>, <addr mode 1>, <addr mode 2>
 
@@ -167,6 +169,24 @@ void set_disable_lock_break () {
 void clr_disable_lock_break () {
 
     disable_lock_break = 0;
+}
+
+// -------------------------------------------------------------------------
+// Enable the calling of any registered SFR access callback on all SFR
+// accesses. Callback returns CB_NOT_PROCESSED (-1) if it didn't process
+// the access.
+//
+void en_all_sfr_callback () {
+    always_call_sfr_cb = 1;
+}
+
+// -------------------------------------------------------------------------
+// Enable the calling of any registered SFR access callback on all SFR
+// accesses. Callback returns CB_NOT_PROCESSED (-1) if it didn't process
+// the access.
+//
+void dis_all_sfr_callback () {
+    always_call_sfr_cb = 0;
 }
 
 // -------------------------------------------------------------------------

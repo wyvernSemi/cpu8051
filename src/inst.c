@@ -86,6 +86,18 @@ int odd_parity8(unsigned val) {
 // should be okay.
 //
 int fetch_sfr (int addr) {
+    int val;
+
+    // If configured to always call a registered SFR access, then call it.
+    // If it handled the access, return its value, else allow the internal handling
+    if (always_call_sfr_cb && pSfrCallback != NULL)
+    {
+        if ((val = pSfrCallback(addr, 0, MEM_CB_READ, int_ram, cycle_count)) != CB_NOT_PROCESSED)
+        {
+            return val;
+        }
+    }
+    
     switch (addr) {
     case SFR_P0   : return p0;
         break;
@@ -129,7 +141,7 @@ int fetch_sfr (int addr) {
         break;
     case SFR_B    : return b;   
         break;
-    default       : return (pSfrCallback == NULL) ? int_ram[addr] : pSfrCallback(addr, 0, MEM_CB_READ, int_ram, cycle_count);
+    default       : return (pSfrCallback == NULL || always_call_sfr_cb) ? int_ram[addr] : pSfrCallback(addr, 0, MEM_CB_READ, int_ram, cycle_count);
         break;
     }
 }
@@ -143,6 +155,17 @@ int fetch_sfr (int addr) {
 // should be okay.
 //
 void set_sfr (int addr, int arg) {
+
+    // If configured to always call any configured SFR access callback do it now.
+    // If the callback processes the access, simply return, else allow internal
+    // processing.
+    if (always_call_sfr_cb && pSfrCallback != NULL)
+    {
+        if (pSfrCallback(addr, arg, MEM_CB_WRITE, int_ram, cycle_count) != CB_NOT_PROCESSED)
+        {
+            return;
+        }
+    }
 
     switch (addr) {
 
@@ -193,7 +216,7 @@ void set_sfr (int addr, int arg) {
         break;
     case SFR_B    : b       = arg;
         break;
-    default       : (pSfrCallback == NULL) ? int_ram[addr] = arg : pSfrCallback(addr, arg, MEM_CB_WRITE, int_ram, cycle_count);
+    default       : (pSfrCallback == NULL || always_call_sfr_cb) ? int_ram[addr] = arg : pSfrCallback(addr, arg, MEM_CB_WRITE, int_ram, cycle_count);
         break;
     }
 }
