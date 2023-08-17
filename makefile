@@ -64,7 +64,7 @@ ${OBJDIR}/read_ihx.o : ${SRCDIR}/read_ihx.c
 # Compilation rules
 ##########################################################
 
-${TARGET} : ${OBJECTS:%=${OBJDIR}/%} ${LIBSOTARGET} ${LIBTARGET}
+${TARGET} : ${OBJDIR} ${OBJECTS:%=${OBJDIR}/%} ${LIBSOTARGET} ${LIBTARGET}
 	@$(CC) ${OBJECTS:%=${OBJDIR}/%} ${ARCHOPT} ${COVOPTS} -o ${TARGET}
 
 ${LIBTARGET}: ${LIBOBJS:%=${OBJDIR}/%}
@@ -76,7 +76,10 @@ ${LIBSOTARGET}: ${LIBOBJS:%=${OBJDIR}/%}
 	@$(CC) -shared -Wl,-soname,${LIBSOTARGET} -o ${LIBSOTARGET} ${COVOPTS} ${LIBOBJS:%=${OBJDIR}/%}
 
 ${OBJDIR}/%.o : ${SRCDIR}/%.c
-	@$(CC) $(COPTS) ${COVOPTS} -c $< -o $@ 
+	@$(CC) $(COPTS) ${COVOPTS} -c $< -o $@
+    
+${OBJDIR}:
+	@mkdir ${OBJDIR}
 
 ##########################################################
 # Microsoft Visual C++ 2010
